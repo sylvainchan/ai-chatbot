@@ -36,6 +36,9 @@ yarn-error.log*
 .vercel
 .env*.local
 
+/.idea/*
+.idea
+
 # Playwright
 /test-results/
 /playwright-report/
