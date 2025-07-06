@@ -1,4 +1,5 @@
 import { z } from "zod/v4";
+import { ZodType, ZodTypeDef } from "zod";
 
 export type CustomChatModelId =
   // premier
@@ -14,9 +15,8 @@ export const customProviderOptions = z.object({
    Defaults to `false`.
    */
   safePrompt: z.boolean().optional(),
-
   documentImageLimit: z.number().optional(),
   documentPageLimit: z.number().optional(),
-});
+}) as unknown as ZodType<unknown, ZodTypeDef, unknown>;
 
 export type CustomProviderOptions = z.infer<typeof customProviderOptions>;
