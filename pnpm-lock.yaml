@@ -11,6 +11,9 @@ importers:
       '@ai-sdk/provider':
         specifier: 2.0.0-beta.1
         version: 2.0.0-beta.1
+      '@ai-sdk/provider-utils':
+        specifier: ^2.2.8
+        version: 2.2.8(zod@3.25.68)
       '@ai-sdk/react':
         specifier: 2.0.0-beta.6
         version: 2.0.0-beta.6(react@19.0.0-rc-45804af1-20241021)(zod@3.25.68)
@@ -146,6 +149,9 @@ importers:
       postgres:
         specifier: ^3.4.4
         version: 3.4.5
+      prettier:
+        specifier: ^3.6.2
+        version: 3.6.2
       prosemirror-example-setup:
         specifier: ^1.2.3
         version: 1.2.3
@@ -288,11 +294,21 @@ packages:
     peerDependencies:
       zod: ^3.25.49
 
+  '@ai-sdk/provider-utils@2.2.8':
+    resolution: {integrity: sha512-fqhG+4sCVv8x7nFzYnFo19ryhAa3w096Kmc3hWxMQfW/TubPOmt3A6tYZhl4mUfQWWQMsuSkLrtjlWuXBVSGQA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.23.8
+
   '@ai-sdk/provider-utils@3.0.0-beta.2':
     resolution: {integrity: sha512-H4K+4weOVgWqrDDeAbQWoA4U5mN4WrQPHQFdH7ynQYcnhj/pzctU9Q6mGlR5ESMWxaXxazxlOblSITlXo9bahA==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.49
+
+  '@ai-sdk/provider@1.1.3':
+    resolution: {integrity: sha512-qZMxYJ0qqX/RfnuIaab+zp8UAeJn/ygXXAffR5I4N0n1IrvA6qBsjc8hXLmBiMV2zoXlifkacF7sEFnYnjBcqg==}
+    engines: {node: '>=18'}
 
   '@ai-sdk/provider@2.0.0-beta.1':
     resolution: {integrity: sha512-Z8SPncMtS3RsoXITmT7NVwrAq6M44dmw0DoUOYJqNNtCu8iMWuxB8Nxsoqpa0uEEy9R1V1ZThJAXTYgjTUxl3w==}
@@ -3323,6 +3339,11 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
 
@@ -3531,6 +3552,9 @@ packages:
 
   scheduler@0.25.0-rc-45804af1-20241021:
     resolution: {integrity: sha512-8jyu/iy3tGFNakMMCWnKw/vsiTcapDyl0LKlZ3fUKBcBicZAkrrCC1bdqVFx0Ioxgry1SzOrCGcZLM7vtWK00A==}
+
+  secure-json-parse@2.7.0:
+    resolution: {integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -3966,6 +3990,13 @@ snapshots:
       '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.68)
       zod: 3.25.68
 
+  '@ai-sdk/provider-utils@2.2.8(zod@3.25.68)':
+    dependencies:
+      '@ai-sdk/provider': 1.1.3
+      nanoid: 3.3.9
+      secure-json-parse: 2.7.0
+      zod: 3.25.68
+
   '@ai-sdk/provider-utils@3.0.0-beta.2(zod@3.25.68)':
     dependencies:
       '@ai-sdk/provider': 2.0.0-beta.1
@@ -3973,6 +4004,10 @@ snapshots:
       eventsource-parser: 3.0.3
       zod: 3.25.68
       zod-to-json-schema: 3.24.5(zod@3.25.68)
+
+  '@ai-sdk/provider@1.1.3':
+    dependencies:
+      json-schema: 0.4.0
 
   '@ai-sdk/provider@2.0.0-beta.1':
     dependencies:
@@ -7077,6 +7112,8 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
+  prettier@3.6.2: {}
+
   pretty-format@3.8.0: {}
 
   prop-types@15.8.1:
@@ -7371,6 +7408,8 @@ snapshots:
       is-regex: 1.2.1
 
   scheduler@0.25.0-rc-45804af1-20241021: {}
+
+  secure-json-parse@2.7.0: {}
 
   semver@6.3.1: {}
 
