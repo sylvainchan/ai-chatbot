@@ -59,8 +59,11 @@ export interface CustomProviderSettings {
 export function createCustom(
   options: CustomProviderSettings = {},
 ): CustomProvider {
+  // const baseURL =
+  //   withoutTrailingSlash(options.baseURL) ?? "http://127.0.0.1:8000"; // fixme: default base URL
   const baseURL =
-    withoutTrailingSlash(options.baseURL) ?? "https://api.custom.ai/v1"; // fixme: default base URL
+    withoutTrailingSlash("http://localhost:8000") ?? "http://localhost:8000";
+  console.log("Creating Custom model with base URL:", baseURL);
 
   const getHeaders = () => ({
     Authorization: `Bearer ${loadApiKey({
@@ -73,7 +76,7 @@ export function createCustom(
 
   const createChatModel = (modelId: CustomChatModelId) =>
     new CustomChatLanguageModel(modelId, {
-      provider: "mistral.chat",
+      provider: "custom.chat",
       baseURL,
       headers: getHeaders,
       fetch: options.fetch,
@@ -81,7 +84,7 @@ export function createCustom(
 
   const createEmbeddingModel = (modelId: CustomEmbeddingModelId) =>
     new CustomEmbeddingModel(modelId, {
-      provider: "mistral.embedding",
+      provider: "custom.embedding",
       baseURL,
       headers: getHeaders,
       fetch: options.fetch,
@@ -90,7 +93,7 @@ export function createCustom(
   const provider = function (modelId: CustomChatModelId) {
     if (new.target) {
       throw new Error(
-        "The Mistral model function cannot be called with the new keyword.",
+        "The Custom model function cannot be called with the new keyword.",
       );
     }
 

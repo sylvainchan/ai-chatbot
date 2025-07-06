@@ -148,8 +148,8 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
     };
 
     const {
-      tools: mistralTools,
-      toolChoice: mistralToolChoice,
+      tools: customTools,
+      toolChoice: customToolChoice,
       toolWarnings,
     } = prepareTools({
       tools,
@@ -159,8 +159,8 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
     return {
       args: {
         ...baseArgs,
-        tools: mistralTools,
-        tool_choice: mistralToolChoice,
+        tools: customTools,
+        tool_choice: customToolChoice,
       },
       warnings: [...warnings, ...toolWarnings],
     };

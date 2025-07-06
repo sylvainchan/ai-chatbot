@@ -30,7 +30,7 @@ export const myProvider = isTestEnvironment
           model: xai("grok-3-mini-beta"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
-        "title-model": xai("grok-2-1212"),
+        "title-model": custom.chat("custom-deepseek-latest"),
         "artifact-model": xai("grok-2-1212"),
       },
       imageModels: {
