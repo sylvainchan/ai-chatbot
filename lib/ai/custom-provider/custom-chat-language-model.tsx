@@ -26,7 +26,6 @@ import {
 } from "./custom-chat-options";
 import { customFailedResponseHandler } from "./custom-error";
 import { prepareTools } from "./custom-prepare-tools";
-import { ZodType, ZodTypeDef } from "zod";
 
 type CustomChatConfig = {
   provider: string;
