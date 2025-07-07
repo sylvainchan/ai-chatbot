@@ -263,7 +263,7 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
       fetch: this.config.fetch,
     });
 
-    let finishReason: LanguageModelV2FinishReason = "unknown";
+    let finishReason: LanguageModelV2FinishReason = "stop";
     const usage: LanguageModelV2Usage = {
       inputTokens: undefined,
       outputTokens: undefined,
