@@ -4,6 +4,7 @@ import { ZodType, ZodTypeDef } from "zod";
 export type CustomChatModelId =
   // premier
   | "custom-deepseek-latest"
+  | "custom-life"
   | "custom-title"
   // reasoning models
   | (string & {});

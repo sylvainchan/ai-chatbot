@@ -28,17 +28,14 @@ export const myProvider = isTestEnvironment
           model: custom.chat("custom-deepseek-latest"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
-        "chat-model": xai("grok-2-vision-1212"),
-        "chat-model-reasoning": wrapLanguageModel({
-          model: xai("grok-3-mini-beta"),
+        "custom-life": wrapLanguageModel({
+          model: custom.chat("custom-life"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
         "title-model": wrapLanguageModel({
           model: custom.title("custom-title"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
-
-        "artifact-model": xai("grok-2-1212"),
       },
       imageModels: {
         "small-model": xai.imageModel("grok-2-image"),
