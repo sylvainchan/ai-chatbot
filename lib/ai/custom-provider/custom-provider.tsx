@@ -30,6 +30,11 @@ export interface CustomProvider extends ProviderV2 {
   chat(modelId: CustomChatModelId): LanguageModelV2;
 
   /**
+   Creates a model for text generation.
+   */
+  title(modelId: CustomChatModelId): LanguageModelV2;
+
+  /**
    @deprecated Use `textEmbeddingModel()` instead.
    */
   embedding(modelId: CustomEmbeddingModelId): EmbeddingModelV2<string>;
@@ -102,6 +107,7 @@ export function createCustom(
 
   provider.languageModel = createChatModel;
   provider.chat = createChatModel;
+  provider.title = createChatModel;
   provider.embedding = createEmbeddingModel;
   provider.textEmbedding = createEmbeddingModel;
   provider.textEmbeddingModel = createEmbeddingModel;

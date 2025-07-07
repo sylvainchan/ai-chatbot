@@ -24,13 +24,20 @@ export const myProvider = isTestEnvironment
     })
   : customProvider({
       languageModels: {
-        "custom-chat-model": custom.chat("custom-deepseek-latest"),
+        "custom-chat-model": wrapLanguageModel({
+          model: custom.chat("custom-deepseek-latest"),
+          middleware: extractReasoningMiddleware({ tagName: "think" }),
+        }),
         "chat-model": xai("grok-2-vision-1212"),
         "chat-model-reasoning": wrapLanguageModel({
           model: xai("grok-3-mini-beta"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
-        "title-model": custom.chat("custom-deepseek-latest"),
+        "title-model": wrapLanguageModel({
+          model: custom.title("custom-title"),
+          middleware: extractReasoningMiddleware({ tagName: "think" }),
+        }),
+
         "artifact-model": xai("grok-2-1212"),
       },
       imageModels: {

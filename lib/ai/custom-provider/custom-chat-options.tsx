@@ -4,8 +4,8 @@ import { ZodType, ZodTypeDef } from "zod";
 export type CustomChatModelId =
   // premier
   | "custom-deepseek-latest"
+  | "custom-title"
   // reasoning models
-  | "custom-small-2506"
   | (string & {});
 
 export const customProviderOptions = z.object({

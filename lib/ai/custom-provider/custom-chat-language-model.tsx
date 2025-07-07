@@ -181,6 +181,7 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
       body,
       failedResponseHandler: customFailedResponseHandler,
       successfulResponseHandler: createJsonResponseHandler(
+        // @ts-ignore
         customChatResponseSchema,
       ),
       abortSignal: options.abortSignal,
@@ -255,6 +256,7 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
       body,
       failedResponseHandler: customFailedResponseHandler,
       successfulResponseHandler: createEventSourceResponseHandler(
+        // @ts-ignore
         customChatChunkSchema,
       ),
       abortSignal: options.abortSignal,
@@ -483,7 +485,7 @@ const customChatResponseSchema = z.object({
   ),
   object: z.literal("chat.completion"),
   usage: customUsageSchema,
-}) as unknown as ZodType<unknown, ZodTypeDef, unknown>;
+});
 
 // limited version of the schema, focussed on what is needed for the implementation
 // this approach limits breakages when the API changes and increases efficiency
@@ -494,7 +496,7 @@ const customChatChunkSchema = z.object({
   choices: z.array(
     z.object({
       delta: z.object({
-        role: z.enum(["assistant"]).optional(),
+        role: z.enum(["assistant"]).nullish().optional(),
         content: customContentSchema,
         tool_calls: z
           .array(
@@ -510,4 +512,4 @@ const customChatChunkSchema = z.object({
     }),
   ),
   usage: customUsageSchema.nullish(),
-}) as unknown as ZodType<unknown, ZodTypeDef, unknown>;
+});
