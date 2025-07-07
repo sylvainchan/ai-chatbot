@@ -73,6 +73,8 @@ export async function createGuestUser() {
       email: user.email,
     });
   } catch (error) {
+    console.error(error);
+
     throw new ChatSDKError(
       "bad_request:database",
       "Failed to create guest user",
@@ -100,6 +102,7 @@ export async function saveChat({
       visibility,
     });
   } catch (error) {
+    console.error(error);
     throw new ChatSDKError("bad_request:database", "Failed to save chat");
   }
 }
@@ -192,6 +195,7 @@ export async function getChatsByUserId({
       hasMore,
     };
   } catch (error) {
+    console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
       "Failed to get chats by user id",

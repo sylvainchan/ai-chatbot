@@ -68,7 +68,6 @@ export function createCustom(
   //   withoutTrailingSlash(options.baseURL) ?? "http://127.0.0.1:8000"; // fixme: default base URL
   const baseURL =
     withoutTrailingSlash("http://localhost:8000") ?? "http://localhost:8000";
-  console.log("Creating Custom model with base URL:", baseURL);
 
   const getHeaders = () => ({
     Authorization: `Bearer ${loadApiKey({
