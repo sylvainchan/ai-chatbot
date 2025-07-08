@@ -26,6 +26,7 @@ import {
 } from "./custom-chat-options";
 import { customFailedResponseHandler } from "./custom-error";
 import { prepareTools } from "./custom-prepare-tools";
+import { list } from "postcss";
 
 type CustomChatConfig = {
   provider: string;
@@ -272,6 +273,18 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
     let isFirstChunk = true;
     let activeText = false;
 
+    let toolCallsActive = false;
+    let toolcalls: {
+      id: string | null | undefined;
+      function:
+        | {
+            name: string | null | undefined;
+            arguments: string | null | undefined;
+          }
+        | null
+        | undefined;
+    }[] = [];
+
     return {
       stream: response.pipeThrough(
         new TransformStream<
@@ -337,34 +350,88 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
             }
 
             if (delta?.tool_calls != null) {
+              toolCallsActive = true;
+
               for (const toolCall of delta.tool_calls) {
                 const toolCallId = toolCall.id;
+                if (toolCallId === null || toolCallId === undefined) {
+                  continue; // skip tool calls without an ID
+                }
                 const toolName = toolCall.function.name;
                 const input = toolCall.function.arguments;
 
+                let existingToolCalls = toolcalls.find(
+                  (x) => x.id == toolCallId,
+                );
+
+                if (existingToolCalls == null) {
+                  toolcalls.push({
+                    id: toolCallId,
+                    function: { name: toolName, arguments: input },
+                  });
+                } else {
+                  let existingToolCallName =
+                    existingToolCalls.function?.name ?? "";
+
+                  let existingToolCallArgs =
+                    existingToolCalls.function?.arguments ?? "";
+
+                  existingToolCalls.function = {
+                    name: existingToolCallName + (toolName ?? ""),
+                    arguments: existingToolCallArgs + (input ?? ""),
+                  };
+                }
+
                 controller.enqueue({
                   type: "tool-input-start",
-                  id: toolCallId,
-                  toolName,
+                  id: toolCallId ?? "",
+                  toolName: toolName ?? "",
                 });
 
                 controller.enqueue({
                   type: "tool-input-delta",
-                  id: toolCallId,
-                  delta: input,
+                  id: toolCallId ?? "",
+                  delta: input ?? "",
+                });
+              }
+            } else {
+              if (toolCallsActive) {
+                toolCallsActive = false;
+
+                let uniqueCalls = toolcalls.filter(function (item, pos, self) {
+                  return self.indexOf(item) == pos;
                 });
 
-                controller.enqueue({
-                  type: "tool-input-end",
-                  id: toolCallId,
-                });
+                console.log(
+                  "tool calls before filter:",
+                  toolcalls,
+                  "after filter:",
+                  uniqueCalls,
+                );
 
-                controller.enqueue({
-                  type: "tool-call",
-                  toolCallId,
-                  toolName,
-                  input,
-                });
+                for (const toolCall of uniqueCalls) {
+                  const toolCallId = toolCall.id;
+                  const toolName = toolCall.function?.name;
+                  const input = toolCall.function?.arguments;
+
+                  if (toolCallId == null || toolName == null || input == null) {
+                    continue;
+                  }
+
+                  console.log("tool is calling", toolCallId, toolName, input);
+
+                  controller.enqueue({
+                    type: "tool-input-end",
+                    id: toolCallId,
+                  });
+
+                  controller.enqueue({
+                    type: "tool-call",
+                    toolCallId,
+                    toolName,
+                    input,
+                  });
+                }
               }
             }
 
@@ -486,6 +553,16 @@ const customChatResponseSchema = z.object({
   usage: customUsageSchema,
 });
 
+const customToolCallSchema = z.array(
+  z.object({
+    id: z.string().nullish(),
+    function: z.object({
+      name: z.string().nullish(),
+      arguments: z.string().nullish(),
+    }),
+  }),
+);
+
 // limited version of the schema, focussed on what is needed for the implementation
 // this approach limits breakages when the API changes and increases efficiency
 const customChatChunkSchema = z.object({
@@ -497,14 +574,7 @@ const customChatChunkSchema = z.object({
       delta: z.object({
         role: z.enum(["assistant"]).nullish().optional(),
         content: customContentSchema,
-        tool_calls: z
-          .array(
-            z.object({
-              id: z.string(),
-              function: z.object({ name: z.string(), arguments: z.string() }),
-            }),
-          )
-          .nullish(),
+        tool_calls: customToolCallSchema.nullish(),
       }),
       finish_reason: z.string().nullish(),
       index: z.number(),
