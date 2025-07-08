@@ -263,7 +263,7 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
       fetch: this.config.fetch,
     });
 
-    let finishReason: LanguageModelV2FinishReason = "stop";
+    let finishReason: LanguageModelV2FinishReason = "unknown";
     const usage: LanguageModelV2Usage = {
       inputTokens: undefined,
       outputTokens: undefined,
@@ -436,14 +436,18 @@ export class CustomChatLanguageModel implements LanguageModelV2 {
             }
 
             if (choice.finish_reason != null) {
+              console.log("finish reason", choice.finish_reason);
               finishReason = mapCustomFinishReason(choice.finish_reason);
             }
           },
 
           flush(controller) {
             if (activeText) {
+              console.log("ending text stream");
               controller.enqueue({ type: "text-end", id: "0" });
             }
+
+            console.log("end text stream with reason: ", finishReason, usage);
 
             controller.enqueue({
               type: "finish",
